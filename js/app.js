@@ -1,6 +1,10 @@
 'use strict';
-
+// ------------------------------------------------------------
+//                     DEFINE GLOBAL VARIABLES
+// ----------------------------------------
 var PRODUCTS = {};
+var show = document.getElementById('resultList');
+show.style.display= 'none';
 
 var productArray = [
  
@@ -25,7 +29,6 @@ var productArray = [
   ['./img/water-can.jpg', 'water-can', 'water-can'],
   ['./img/wine-glass.jpg', 'wine-glass', 'wine-glass'],
 ];
-console.log(productArray[1]);
 
 for(var i = 0; i < productArray.length; i++){
   new Product(productArray[i][0], productArray[i][1], productArray[i][2]);
@@ -41,11 +44,17 @@ this.totalViews = 0;
 PRODUCTS[this.HTMLid] = this;
 }
 
-new Product('./img/boots.jpg', 'boots', 'boots');
-console.log(PRODUCTS);
-
 Product.prototype.getPercentClicked = function(){
 return this.totalVotes / this.totalViews;
+}
+
+function stopVoting(){
+  console.log(totalClicks);
+  if(totalClicks === 25){
+    container.removeEventListener('click', handleClick);
+    totalClicks === 0;
+    showResults();
+  }
 }
 
 var maxImages = 24;
@@ -56,10 +65,16 @@ var getRandom = function(maxImages, minImages){
 }
 
 var container = document.getElementById('container');
-console.log('hello');
-console.log(container);
+// console.log('hello');
+// console.log(container);
 
 var totalClicks = 0;  // Should this var be totalvotes?
+
+function showResults(){
+  show = document.getElementById('resultList');
+  show.style.display = 'block';
+}
+
 
 function handleClick(event) {
   // console.log(event.target.id);
@@ -70,10 +85,7 @@ function handleClick(event) {
     PRODUCTS[event.target.id].totalVotes++
     console.log(PRODUCTS[event.target.id]);
     totalClicks++;
-// console.log(totalClicks);
-    // if(totalClicks === 5){   //will not work within event handler.
-    //   totalClicks = 0;
-    // }
+    stopVoting();
   }
 }
 
