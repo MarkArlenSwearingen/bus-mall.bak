@@ -4,10 +4,11 @@
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
-show.style.display= 'none';
+show.style.display= 'block';  //Change back to none after testing
+var maxImages = 24;
+var minImages = 0;
 
 var productArray = [
- 
   ['./img/bag.jpg', 'bag', 'bag'],
   ['./img/banana.jpg', 'banana', 'banana'],
   ['./img/bathroom.jpg', 'bathroom', 'bathroom'],
@@ -38,27 +39,43 @@ function Product(imgFilePath, name, HTMLid){
 this.imgFilePath = imgFilePath;
 this.name = name;
 this.HTMLid = HTMLid;
-this.totalVotes = 0;
+this.totalVotesOnPage = 0;
 this.totalViews = 0;
 
 PRODUCTS[this.HTMLid] = this;
 }
 
 Product.prototype.getPercentClicked = function(){
-return this.totalVotes / this.totalViews;
+return this.totalVotesOnPage / this.totalViews;
+}
+
+Product.prototype.render = function(parentId){
+  var parent = getElementById(parentId);
+
+  var img = document.createElement('img');
+  img.setAttribute('id', this.HTMLid)
+  img.setAttribute('src', this.imgFilePath);
+  img.setAttribute('class', 'product');
+
+  parent.appendChild(img);
+}
+
+function randomlySelectNewImages(){
+
+}
+
+function addCurrentSetOfImages(event){
+
 }
 
 function stopVoting(){
-  console.log(totalClicks);
-  if(totalClicks === 25){
+  console.log(totalVotes);
+  if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
-    totalClicks === 0;
-    showResults();
+    totalVotes === 0;
+    displayResults();
   }
 }
-
-var maxImages = 24;
-var minImages = 0;
 
 var getRandom = function(maxImages, minImages){
   return Math.floor(Math.random() * (maxImages - minImages) + minImages);
@@ -68,13 +85,12 @@ var container = document.getElementById('container');
 // console.log('hello');
 // console.log(container);
 
-var totalClicks = 0;  // Should this var be totalvotes?
+var totalVotes = 0;  // Should this var be totalvotes?
 
-function showResults(){
+function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
 }
-
 
 function handleClick(event) {
   // console.log(event.target.id);
@@ -82,10 +98,12 @@ function handleClick(event) {
     // console.log(event.target.id);
     //     event.target.id = 'boots';
     // event.target.src = './img/boots.jpg';
-    PRODUCTS[event.target.id].totalVotes++
+    PRODUCTS[event.target.id].totalVotesOnPage++
     console.log(PRODUCTS[event.target.id]);
-    totalClicks++;
+    totalVotes++;
     stopVoting();
+    randomlySelectNewImages();
+    addCurrentSetOfImages(event);
   }
 }
 
