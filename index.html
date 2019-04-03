@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link href="./css/style.css" type="text/css" rel="stylesheet" />
-<script src="./js/app.js"></script>
 
 </head>
 <body>
@@ -14,21 +13,21 @@
       <div id="header" class="grid-cell">
         <h1>Bus Mall</h1>
       </div>
-        <div class="grid-cell" id="item_1">TWO
-          <img class="product" id="bag" src="./img/bag.jpg"/>
+        <div class="grid-cell" id="item_1">
+            <img class="product" id="banana" src="./img/banana.jpg"/>
         </div>
-        <div class="grid-cell" id="item_2">THREE
-        <img class="product" id="banana" src="./img/banana.jpg"/>
-      </div>
-        <div class="grid-cell" id="item_3">FOUR
-          <img class="product" id="bathroom" src="./img/bathroom.jpg"/>
+        <div class="grid-cell" id="item_2">
+            <img class="product" id="bathroom" src="./img/bathroom.jpg"/>
+        </div>
+        <div class="grid-cell" id="item_3">
+            <img class="product" id="bag" src="./img/bag.jpg"/>
         </div>
         <div class="grid-cell" id="resultList">FIVE
           <h3>Top Ranked Products (highest to lowest)</h3>
-          <ol>
+          <ol id='votes'>
               <li>Number 1</li>
               <li>Number 2</li>
-              <li>Number 3</li>
+              <li>3 votes for the Banana Slicer</li>
               <li>Number 4</li>
               <li>Number 5</li>
               <li>Number 6</li>
@@ -55,5 +54,7 @@
         </div>
   </div>
   </div>
+  <script src="./js/app.js"></script>
+
 </body>
 </html>
