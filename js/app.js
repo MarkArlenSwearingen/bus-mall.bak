@@ -5,10 +5,10 @@
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
 show.style.display= 'none'; //Change back to none after testing
-var maxImages = 24;
+var maxImages = 20;
 var minImages = 0;
-var lastPageImages = [];
-var totalVotes = 0; 
+var lastPageImages = [ 0, 1, 2];
+var totalVotes = 0;
 var totalViews = 0;
 
 var productArray = [
@@ -45,7 +45,7 @@ this.HTMLid = HTMLid;
 this.totalVotesOnPage = 0;
 this.totalViews = 0;
 
-PRODUCTS[this.HTMLid] = this;
+  PRODUCTS[this.HTMLid] = this;
 }
 
 Product.prototype.getPercentClicked = function(){
@@ -55,7 +55,7 @@ Product.prototype.getPercentClicked = function(){
 Product.prototype.render = function(parentId){
   console.log('hello');
   var parent = document.getElementById(parentId);
-// console.log(parent);
+  // console.log(parent);
   var img = document.createElement('img');
   img.setAttribute('id', this.HTMLid);
   img.setAttribute('src', this.imgFilePath);
@@ -86,7 +86,7 @@ function randomlySelectNewImages(){
 // lastPageImages Array.  Go through three remaining steps of creating the img element, setting the attributes for class, id and src, and appending the new
 // child to the parent element.  Potentially a time to write the record that the image was viewed and remove entry from lastPageImages array.  Hopefully,
 // this will address the data issue of only getting two of the three values.
-function addCurrentSetOfImages(event){
+function addCurrentSetOfImages(){
   var parent = document.getElementById('item_1');
   var child = parent.firstElementChild;
   if(child){child.remove();}
