@@ -4,7 +4,7 @@
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
-show.style.display= 'none';  //Change back to none after testing
+show.style.display= 'none'; //Change back to none after testing
 var maxImages = 24;
 var minImages = 0;
 var lastPageImages = [];
@@ -49,20 +49,20 @@ PRODUCTS[this.HTMLid] = this;
 }
 
 Product.prototype.getPercentClicked = function(){
-return this.totalVotesOnPage / this.totalViews;
-}
+  return this.totalVotesOnPage / this.totalViews;
+};
 
 Product.prototype.render = function(parentId){
   console.log('hello');
   var parent = document.getElementById(parentId);
 // console.log(parent);
   var img = document.createElement('img');
-  img.setAttribute('id', this.HTMLid)
+  img.setAttribute('id', this.HTMLid);
   img.setAttribute('src', this.imgFilePath);
   img.setAttribute('class', 'product');
 
   parent.appendChild(img);
-}
+};
 
 function randomlySelectNewImages(){
   for(var i = 0; i < 3; i++){
@@ -72,12 +72,12 @@ function randomlySelectNewImages(){
       randomIndex = getRandom(24, 0);
     }
     lastPageImages.push(randomIndex);
-    }
+  }
   
   if(lastPageImages.length === 6){
     lastPageImages.shift(); // Get syntax for shift
-    lastPageImages.shift(); 
-    lastPageImages.shift(); 
+    lastPageImages.shift();
+    lastPageImages.shift();
   }
 }
 
@@ -96,7 +96,7 @@ function addCurrentSetOfImages(event){
   console.log(lastPageImages[0]);
   var firstImageOfDisplayed = productArray[lastPageImages[0]];
   console.log(firstImageOfDisplayed);
-  var nameOfFirstImageofDisplayed = firstImageOfDisplayed.splice(2,1)
+  var nameOfFirstImageofDisplayed = firstImageOfDisplayed.splice(2,1);
   console.log(nameOfFirstImageofDisplayed[0]);
   var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
   var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
@@ -108,45 +108,45 @@ function addCurrentSetOfImages(event){
   newChild.setAttribute('src', newImgPath);
   parent.appendChild(newChild);
 
-     //add second image to DOM and remove old image from Dom
-  var parent = document.getElementById('item_2');
-  var child = parent.firstElementChild;
+  //add second image to DOM and remove old image from Dom
+  parent = document.getElementById('item_2');
+  child = parent.firstElementChild;
   console.log(child);
   if(child){child.remove();}
   console.log(lastPageImages);
   var secondImageOfDisplayed = productArray[lastPageImages[1]];
   console.log(secondImageOfDisplayed);
-  var nameOfSecondImageofDisplayed = secondImageOfDisplayed .splice(2,1)
-  var newImgPath = PRODUCTS[nameOfSecondImageofDisplayed[0]].imgFilePath;
-  var newIdName = PRODUCTS[nameOfSecondImageofDisplayed[0]].name;
-  var newChild = document.createElement('img');
+  var nameOfSecondImageofDisplayed = secondImageOfDisplayed .splice(2,1);
+  newImgPath = PRODUCTS[nameOfSecondImageofDisplayed[0]].imgFilePath;
+  newIdName = PRODUCTS[nameOfSecondImageofDisplayed[0]].name;
+  newChild = document.createElement('img');
   newChild.setAttribute('class', 'product');
   newChild.setAttribute('id', newIdName);
   newChild.setAttribute('src', newImgPath);
   parent.appendChild(newChild); parent.appendChild(newChild);
 
-    // add Third New Image to DOM and remove old image from Dom
-  var parent = document.getElementById('item_3');
-  var child = parent.firstElementChild;
+  // add Third New Image to DOM and remove old image from Dom
+  parent = document.getElementById('item_3');
+  child = parent.firstElementChild;
   console.log(child);
   if(child){child.remove();}
   console.log(lastPageImages);
   var thirdImageOfDisplayed = productArray[lastPageImages[2]];
   console.log(thirdImageOfDisplayed);
-  var nameOfThirdImageofDisplayed = thirdImageOfDisplayed .splice(2,1)
-  var newImgPath = PRODUCTS[nameOfThirdImageofDisplayed[0]].imgFilePath;
-  var newIdName = PRODUCTS[nameOfThirdImageofDisplayed[0]].name;
-  var newChild = document.createElement('img');
+  var nameOfThirdImageofDisplayed = thirdImageOfDisplayed .splice(2,1);
+  newImgPath = PRODUCTS[nameOfThirdImageofDisplayed[0]].imgFilePath;
+  newIdName = PRODUCTS[nameOfThirdImageofDisplayed[0]].name;
+  newChild = document.createElement('img');
   newChild.setAttribute('class', 'product');
   newChild.setAttribute('id', newIdName);
   newChild.setAttribute('src', newImgPath);
   parent.appendChild(newChild); parent.appendChild(newChild);
 
-   //update the total views for each image
+  //update the total views for each image
   //Error messages from these complicated statements so need a better method for tracking views of individual images.
-  PRODUCTS[productArray[lastPageImages[0]][1]].totalViews++
-  PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++
-  PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++
+  PRODUCTS[productArray[lastPageImages[0]][1]].totalViews++;
+  PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
+  PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
 }
 
 function stopVoting(){
@@ -160,7 +160,7 @@ function stopVoting(){
 
 var getRandom = function(maxImages, minImages){
   return Math.floor(Math.random() * (maxImages - minImages) + minImages);
-}
+};
 
 var container = document.getElementById('container');
 
@@ -175,7 +175,7 @@ function handleClick(event) {
     // console.log(event.target.id);
     //     event.target.id = 'boots';
     // event.target.src = './img/boots.jpg';
-    PRODUCTS[event.target.id].totalVotesOnPage++
+    PRODUCTS[event.target.id].totalVotesOnPage++;
     console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
     stopVoting();
