@@ -50,8 +50,8 @@ return this.totalVotesOnPage / this.totalViews;
 }
 
 Product.prototype.render = function(parentId){
-  var parent = getElementById(parentId);
-
+  var parent = document.getElementById(parentId);
+console.log(parent);
   var img = document.createElement('img');
   img.setAttribute('id', this.HTMLid)
   img.setAttribute('src', this.imgFilePath);
@@ -65,7 +65,7 @@ function randomlySelectNewImages(){
 }
 
 function addCurrentSetOfImages(event){
-
+//update the total views for each image
 }
 
 function stopVoting(){
@@ -85,7 +85,7 @@ var container = document.getElementById('container');
 // console.log('hello');
 // console.log(container);
 
-var totalVotes = 0;  // Should this var be totalvotes?
+var totalVotes = 0; 
 
 function displayResults(){
   show = document.getElementById('resultList');
@@ -125,4 +125,7 @@ if(lastPageImages.length === 6){
 }
 
 container.addEventListener('click', handleClick);
+
+var boots = new Product('./img/boots.jpg', 'Boots', 'boots');
+boots.render('item_1'); 
 
