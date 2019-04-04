@@ -185,6 +185,7 @@ function handleClick(event) {
     stopVoting();
     randomlySelectNewImages();
     addCurrentSetOfImages(event);
+    setStateToLocalStorage();
   }
 }
 
@@ -224,4 +225,68 @@ var pieChartConfig = {
 };
 
 var pieChart = new Chart(ctx, pieChartConfig);
+
+
+// --------------------------------------------------------------------
+// LocalStorage 
+//-------------------------------------------------------------------------
+
+var STATE_KEY = 'totalVotes';
+
+//Place all functions within the getStateFromLocalStoreage and setStateToLocalStorage functions for any change of state.
+(function getStateFromLocalStoreage(){
+  if(localStorage[STATE_KEY]){
+    var rawState = localStorage.getItem(STATE_KEY);
+    totalVotes = JSON.parse(rawState);
+    renderDOM();
+    getTotalVotes();
+    getLastImagesArray();
+    getProductVotesAndViews();
+  }else{
+    resetState();
+  }
+})(); //groups and calls function.
+
+function setStateToLocalStorage(){
+  setTotalVotes();
+  setLastImagesArray();
+  setDOM();
+  setProductVotesAndViews();
+}
+
+function resetState(){
+  //include calls to all functions needed to reset the state to where the user refreshed or closed browser window.
+}
+
+function renderDOM () {
+//render the DOM and set the display (show.style.display= 'none'; from 'block') if at 25 votes
+}
+
+function setDOM () {
+  //save the state of the DOM to local storage
+}
+
+function setTotalVotes() {
+  localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));//test then replace with STATE_KEY
+  //store the value of total votes if between 1 and 25 inclusive.
+}
+
+function getTotalVotes(){
+  //get Total Votes from local storage and update global variable
+}
+
+function setLastImagesArray (){
+  // store the last images array
+}
+
+function getLastImagesArray (){
+  //get last images array data and populate array
+}
+
+function getProductVotesAndViews(){
+  //get the totalVotesOnPage and totalViews from PRODUCT
+}
+function setProductVotesAndViews(){
+  //set the totalVotesOnPage and totalViews to PRODUCT
+}
 
