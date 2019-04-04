@@ -1,4 +1,18 @@
 'use strict';
+
+// ------------------------------------------------------------
+//TODO LIST:
+// ------------------------------------------------------------
+// 
+// DISPLAY FIRST RANDOM GROUP ON LOAD VERSUS CLICK
+// UPDATE TEXT CONTENT FOR LI'S.
+//FIX COUNTS OF VIEWS BY PRODUCT
+//DETERMINE CAUSE OF DISPLAY OF PIE CHART MISSING COUNTS IN DATA
+//RESIZE AND STYLE PIE CHART
+//RESIZE SHARK IMAGE TO FIT IN WINDOW
+//STRETCH GOALS
+// ------------------------------------------------------------
+
 // ------------------------------------------------------------
 //                     DEFINE GLOBAL VARIABLES
 // ----------------------------------------
