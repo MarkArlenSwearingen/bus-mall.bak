@@ -11,6 +11,7 @@ var lastPageImages = [ ];
 var totalVotes = 0;
 var totalViews = 0;
 var container = document.getElementById('container');
+var RESULTS = [];
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -132,7 +133,11 @@ function stopVoting(){
   console.log(totalVotes);
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
+    console.log(totalVotes);
     totalVotes === 0;
+    for( i = 0; i < PRODUCTSARRAY.length; i++) {
+      RESULTS.push(i, PRODUCTSARRAY[i].name, PRODUCTSARRAY[i].totalVotesOnPage, PRODUCTSARRAY[i].totalViews);
+    }
     displayResults();
   }
 }
@@ -146,6 +151,8 @@ var getRandom = function(MAXIMAGES, MINIMAGES){
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
+  console.log(RESULTS);
+
 }
 
 function handleClick(event) {
@@ -182,3 +189,4 @@ console.log(PRODUCTSARRAY[11].imgFilePath);
 console.log(PRODUCTSARRAY[11].HTMLid);
 console.log(PRODUCTSARRAY[11].name);
 console.log(PRODUCTSARRAY[11]);
+
