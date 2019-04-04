@@ -18,15 +18,17 @@
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
-show.style.display= 'none'; //Change back to none after testing
+show.style.display= 'block'; //Change back to none after testing or to block to test
 var MAXIMAGES = 20;
 var MINIMAGES = 0;
 var lastPageImages = [ ];
 var totalVotes = 0;
 var totalViews = 0;
 var container = document.getElementById('container');
+var ol = document.getElementById('votes');
 var RESULTLABELS = [];
 var RESULTDATAVOTES = [];
+var initialImageLoad = document.getElementById('item_1');
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -146,6 +148,9 @@ function addViewsOfProduct() {
 
 function stopVoting(){
   // console.log(totalVotes);
+  if(totalVotes > 25){
+    totalVotes = 0;
+  }
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
     console.log(totalVotes);
@@ -170,6 +175,14 @@ function displayResults(){
   show.style.display = 'block';
   console.log(RESULTLABELS);
   console.log(RESULTDATAVOTES);
+  console.log(RESULTLABELS[0]);
+  console.log(RESULTDATAVOTES[0]);
+  console.log(ol);
+  for(var i = 0; i < PRODUCTSARRAY.length; i++){
+    var li = document.createElement('li');
+    li.textContent = `${RESULTDATAVOTES[i]} votes for the ${RESULTLABELS[i]}`;
+    ol.appendChild(li);
+  }
 
 }
 
@@ -192,22 +205,22 @@ function handleClick(event) {
 // --------------------------------------------------------------
 //                        Run Script
 // --------------------------------------------------------------
-
 // Generate Objects for Products
 for(var i = 0; i < productArray.length; i++){
   new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
 }
+
+// render the images at start up.
+randomlySelectNewImages();
+addCurrentSetOfImages();
+
+
 
 container.addEventListener('click', handleClick);
 // console.log(PRODUCTS);
 
 
 var PRODUCTSARRAY = Object.values(PRODUCTS);
-// console.log(PRODUCTSARRAY);
-// console.log(PRODUCTSARRAY[11].imgFilePath);
-// console.log(PRODUCTSARRAY[11].HTMLid);
-// console.log(PRODUCTSARRAY[11].name);
-// console.log(PRODUCTSARRAY[11]);
 
 var canvas = document.getElementById('markschart');
 var ctx = canvas.getContext('2d');
