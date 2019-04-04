@@ -11,7 +11,8 @@ var lastPageImages = [ ];
 var totalVotes = 0;
 var totalViews = 0;
 var container = document.getElementById('container');
-var RESULTS = [];
+var RESULTLABELS = [];
+var RESULTDATAVOTES = [];
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -55,7 +56,7 @@ Product.prototype.getPercentClicked = function(){
 };
 
 Product.prototype.render = function(parentId){
-  console.log('hello');
+  // console.log('hello');
   var parent = document.getElementById(parentId);
   // console.log(parent);
   var img = document.createElement('img');
@@ -98,9 +99,9 @@ function addCurrentSetOfImages(){
       var parent = document.getElementById(`item_${i+1}`);
       var child = parent.firstElementChild;
       if(child){child.remove();}
-      console.log(lastPageImages);
+      // console.log(lastPageImages);
       var productToRender = lastPageImages[i];
-      console.log(productToRender);
+      // console.log(productToRender);
       var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
       var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
       
@@ -122,7 +123,7 @@ function addCurrentSetOfImages(){
 function addViewsOfProduct() {
   for (var i = 0; i < 3; i++){
     var productIndex = lastPageImages[i];//loop through first the random numbers in array
-    console.log(productIndex);
+    // console.log(productIndex);
     PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
     // PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
     // PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
@@ -130,13 +131,15 @@ function addViewsOfProduct() {
 }
 
 function stopVoting(){
-  console.log(totalVotes);
+  // console.log(totalVotes);
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
     console.log(totalVotes);
     totalVotes === 0;
     for( i = 0; i < PRODUCTSARRAY.length; i++) {
-      RESULTS.push(i, PRODUCTSARRAY[i].name, PRODUCTSARRAY[i].totalVotesOnPage, PRODUCTSARRAY[i].totalViews);
+      RESULTLABELS.push(PRODUCTSARRAY[i].name);
+      
+      RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
     }
     displayResults();
   }
@@ -151,7 +154,8 @@ var getRandom = function(MAXIMAGES, MINIMAGES){
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
-  console.log(RESULTS);
+  console.log(RESULTLABELS);
+  console.log(RESULTDATAVOTES);
 
 }
 
@@ -162,7 +166,7 @@ function handleClick(event) {
     //     event.target.id = 'boots';
     // event.target.src = './img/boots.jpg';
     PRODUCTS[event.target.id].totalVotesOnPage++;
-    console.log(PRODUCTS[event.target.id].totalViews);
+    // console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
     stopVoting();
     randomlySelectNewImages();
@@ -180,13 +184,30 @@ for(var i = 0; i < productArray.length; i++){
 }
 
 container.addEventListener('click', handleClick);
-console.log(PRODUCTS);
+// console.log(PRODUCTS);
 
 
 var PRODUCTSARRAY = Object.values(PRODUCTS);
-console.log(PRODUCTSARRAY);
-console.log(PRODUCTSARRAY[11].imgFilePath);
-console.log(PRODUCTSARRAY[11].HTMLid);
-console.log(PRODUCTSARRAY[11].name);
-console.log(PRODUCTSARRAY[11]);
+// console.log(PRODUCTSARRAY);
+// console.log(PRODUCTSARRAY[11].imgFilePath);
+// console.log(PRODUCTSARRAY[11].HTMLid);
+// console.log(PRODUCTSARRAY[11].name);
+// console.log(PRODUCTSARRAY[11]);
+
+var canvas = document.getElementById('markschart');
+var ctx = canvas.getContext('2d');
+
+var data = {
+  datasets: [{
+    data: [RESULTDATAVOTES],
+  }],
+  labels: [RESULTLABELS]
+};
+
+var pieChartConfig = {
+  type: 'pie',
+  data: data,
+};
+
+var pieChart = new Chart(ctx, pieChartConfig);
 
