@@ -44,3 +44,9 @@
 .product-cell {
   text-align: center;
 }
+
+.markschart {
+  width: 550px;
+  height: 550px;
+  border: 3px solid red;
+}

@@ -1,15 +1,32 @@
 'use strict';
+
+// ------------------------------------------------------------
+//TODO LIST:
+// ------------------------------------------------------------
+// 
+// DISPLAY FIRST RANDOM GROUP ON LOAD VERSUS CLICK
+// UPDATE TEXT CONTENT FOR LI'S.
+//FIX COUNTS OF VIEWS BY PRODUCT
+//DETERMINE CAUSE OF DISPLAY OF PIE CHART MISSING COUNTS IN DATA
+//RESIZE AND STYLE PIE CHART
+//RESIZE SHARK IMAGE TO FIT IN WINDOW
+//STRETCH GOALS
+// ------------------------------------------------------------
+
 // ------------------------------------------------------------
 //                     DEFINE GLOBAL VARIABLES
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
 show.style.display= 'none'; //Change back to none after testing
-var maxImages = 20;
-var minImages = 0;
-var lastPageImages = [ 0, 1, 2];
+var MAXIMAGES = 20;
+var MINIMAGES = 0;
+var lastPageImages = [ ];
 var totalVotes = 0;
 var totalViews = 0;
+var container = document.getElementById('container');
+var RESULTLABELS = [];
+var RESULTDATAVOTES = [];
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -39,11 +56,11 @@ var productArray = [
 // -----------------------------------------------------------------
 
 function Product(imgFilePath, name, HTMLid){
-this.imgFilePath = imgFilePath;
-this.name = name;
-this.HTMLid = HTMLid;
-this.totalVotesOnPage = 0;
-this.totalViews = 0;
+  this.imgFilePath = imgFilePath;
+  this.name = name;
+  this.HTMLid = HTMLid;
+  this.totalVotesOnPage = 0;
+  this.totalViews = 0;
 
   PRODUCTS[this.HTMLid] = this;
 }
@@ -53,7 +70,7 @@ Product.prototype.getPercentClicked = function(){
 };
 
 Product.prototype.render = function(parentId){
-  console.log('hello');
+  // console.log('hello');
   var parent = document.getElementById(parentId);
   // console.log(parent);
   var img = document.createElement('img');
@@ -66,10 +83,10 @@ Product.prototype.render = function(parentId){
 
 function randomlySelectNewImages(){
   for(var i = 0; i < 3; i++){
-    var randomIndex = getRandom(24, 0);
+    var randomIndex = getRandom(MAXIMAGES, MINIMAGES);
     // i = 3;  // used for testing
     while(lastPageImages.includes(randomIndex)){
-      randomIndex = getRandom(24, 0);
+      randomIndex = getRandom(MAXIMAGES, MINIMAGES);
     }
     lastPageImages.push(randomIndex);
   }
@@ -81,92 +98,79 @@ function randomlySelectNewImages(){
   }
 }
 
-// Add the new images to the DOM - Got lost in details. Need to firt get parent of first item in listPageImages array.
+// Add the new images to the DOM -
+//item_x are the three id's used in the HTML for attaching the image elements.
+
+//Got lost in details. Need to firt get parent of first item in listPageImages array.
 // After confirming that there is a parent and was a child, remove child.  Then, get the random number generated as the fourth(index 3) of the
 // lastPageImages Array.  Go through three remaining steps of creating the img element, setting the attributes for class, id and src, and appending the new
 // child to the parent element.  Potentially a time to write the record that the image was viewed and remove entry from lastPageImages array.  Hopefully,
 // this will address the data issue of only getting two of the three values.
 function addCurrentSetOfImages(){
-  var parent = document.getElementById('item_1');
-  var child = parent.firstElementChild;
-  if(child){child.remove();}
-  // console.log(parent);
-  // console.log(child);
-  console.log(lastPageImages);
-  console.log(lastPageImages[0]);
-  var firstImageOfDisplayed = productArray[lastPageImages[0]];
-  console.log(firstImageOfDisplayed);
-  var nameOfFirstImageofDisplayed = firstImageOfDisplayed.splice(2,1);
-  console.log(nameOfFirstImageofDisplayed[0]);
-  var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
-  var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
-  // console.log(newImgPath);
-  var newChild = document.createElement('img');
-  // console.log(newChild);
-  newChild.setAttribute('class', 'product');
-  newChild.setAttribute('id', newIdName);
-  newChild.setAttribute('src', newImgPath);
-  parent.appendChild(newChild);
 
-  //add second image to DOM and remove old image from Dom
-  parent = document.getElementById('item_2');
-  child = parent.firstElementChild;
-  console.log(child);
-  if(child){child.remove();}
-  console.log(lastPageImages);
-  var secondImageOfDisplayed = productArray[lastPageImages[1]];
-  console.log(secondImageOfDisplayed);
-  var nameOfSecondImageofDisplayed = secondImageOfDisplayed .splice(2,1);
-  newImgPath = PRODUCTS[nameOfSecondImageofDisplayed[0]].imgFilePath;
-  newIdName = PRODUCTS[nameOfSecondImageofDisplayed[0]].name;
-  newChild = document.createElement('img');
-  newChild.setAttribute('class', 'product');
-  newChild.setAttribute('id', newIdName);
-  newChild.setAttribute('src', newImgPath);
-  parent.appendChild(newChild); parent.appendChild(newChild);
+  for (var i = 0; i < 3; i++) {
+    if (totalVotes > 1){
+      var parent = document.getElementById(`item_${i+1}`);
+      var child = parent.firstElementChild;
+      if(child){child.remove();}
+      // console.log(lastPageImages);
+      var productToRender = lastPageImages[i];
+      // console.log(productToRender);
+      var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
+      var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
+      
+      // var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
+      // var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
+      var newChild = document.createElement('img');
+      newChild.setAttribute('class', 'product');
+      newChild.setAttribute('id', newIdName);
+      newChild.setAttribute('src', newImgPath);
+      parent.appendChild(newChild);
+      addViewsOfProduct();
+    }
+  }
+}
+  
 
-  // add Third New Image to DOM and remove old image from Dom
-  parent = document.getElementById('item_3');
-  child = parent.firstElementChild;
-  console.log(child);
-  if(child){child.remove();}
-  console.log(lastPageImages);
-  var thirdImageOfDisplayed = productArray[lastPageImages[2]];
-  console.log(thirdImageOfDisplayed);
-  var nameOfThirdImageofDisplayed = thirdImageOfDisplayed .splice(2,1);
-  newImgPath = PRODUCTS[nameOfThirdImageofDisplayed[0]].imgFilePath;
-  newIdName = PRODUCTS[nameOfThirdImageofDisplayed[0]].name;
-  newChild = document.createElement('img');
-  newChild.setAttribute('class', 'product');
-  newChild.setAttribute('id', newIdName);
-  newChild.setAttribute('src', newImgPath);
-  parent.appendChild(newChild); parent.appendChild(newChild);
-
-  //update the total views for each image
-  //Error messages from these complicated statements so need a better method for tracking views of individual images.
-  PRODUCTS[productArray[lastPageImages[0]][1]].totalViews++;
-  PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
-  PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
+//update the total views for each image
+//Error messages from these complicated statements so need a better method for tracking views of individual images.
+function addViewsOfProduct() {
+  for (var i = 0; i < 3; i++){
+    var productIndex = lastPageImages[i];//loop through first the random numbers in array
+    // console.log(productIndex);
+    PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
+    // PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
+    // PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
+  }
 }
 
 function stopVoting(){
-  console.log(totalVotes);
+  // console.log(totalVotes);
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
+    console.log(totalVotes);
     totalVotes === 0;
+    for( i = 0; i < PRODUCTSARRAY.length; i++) {
+      RESULTLABELS.push(PRODUCTSARRAY[i].name);
+      
+      RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
+    }
     displayResults();
   }
 }
 
-var getRandom = function(maxImages, minImages){
-  return Math.floor(Math.random() * (maxImages - minImages) + minImages);
+var getRandom = function(MAXIMAGES, MINIMAGES){
+  return Math.floor(Math.random() * (MAXIMAGES - MINIMAGES) + MINIMAGES);
 };
 
-var container = document.getElementById('container');
+
 
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
+  console.log(RESULTLABELS);
+  console.log(RESULTDATAVOTES);
+
 }
 
 function handleClick(event) {
@@ -176,7 +180,7 @@ function handleClick(event) {
     //     event.target.id = 'boots';
     // event.target.src = './img/boots.jpg';
     PRODUCTS[event.target.id].totalVotesOnPage++;
-    console.log(PRODUCTS[event.target.id].totalViews);
+    // console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
     stopVoting();
     randomlySelectNewImages();
@@ -190,9 +194,34 @@ function handleClick(event) {
 
 // Generate Objects for Products
 for(var i = 0; i < productArray.length; i++){
-  new Product(productArray[i][0], productArray[i][1], productArray[i][2]);
+  new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
 }
 
 container.addEventListener('click', handleClick);
-console.log(PRODUCTS);
+// console.log(PRODUCTS);
+
+
+var PRODUCTSARRAY = Object.values(PRODUCTS);
+// console.log(PRODUCTSARRAY);
+// console.log(PRODUCTSARRAY[11].imgFilePath);
+// console.log(PRODUCTSARRAY[11].HTMLid);
+// console.log(PRODUCTSARRAY[11].name);
+// console.log(PRODUCTSARRAY[11]);
+
+var canvas = document.getElementById('markschart');
+var ctx = canvas.getContext('2d');
+
+var data = {
+  datasets: [{
+    data: [RESULTDATAVOTES],
+  }],
+  labels: [RESULTLABELS]
+};
+
+var pieChartConfig = {
+  type: 'pie',
+  data: data,
+};
+
+var pieChart = new Chart(ctx, pieChartConfig);
 
