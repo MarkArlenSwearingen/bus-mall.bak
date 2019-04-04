@@ -153,7 +153,7 @@ function stopVoting(){
   }
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
-    console.log(totalVotes);
+    // console.log(totalVotes);
     totalVotes === 0;
     for( i = 0; i < PRODUCTSARRAY.length; i++) {
       RESULTLABELS.push(PRODUCTSARRAY[i].name);
@@ -173,11 +173,11 @@ var getRandom = function(MAXIMAGES, MINIMAGES){
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
-  console.log(RESULTLABELS);
-  console.log(RESULTDATAVOTES);
-  console.log(RESULTLABELS[0]);
-  console.log(RESULTDATAVOTES[0]);
-  console.log(ol);
+  // console.log(RESULTLABELS);
+  // console.log(RESULTDATAVOTES);
+  // console.log(RESULTLABELS[0]);
+  // console.log(RESULTDATAVOTES[0]);
+  // console.log(ol);
   for(var i = 0; i < PRODUCTSARRAY.length; i++){
     var li = document.createElement('li');
     li.textContent = `${RESULTDATAVOTES[i]} votes for the ${RESULTLABELS[i]}`;
@@ -216,6 +216,7 @@ addCurrentSetOfImages();
 
 
 
+
 container.addEventListener('click', handleClick);
 // console.log(PRODUCTS);
 
@@ -224,16 +225,26 @@ var PRODUCTSARRAY = Object.values(PRODUCTS);
 
 var canvas = document.getElementById('markschart');
 var ctx = canvas.getContext('2d');
-
+var chartLabels = [];
+var chartData = [];
+for( i = 0; i < PRODUCTSARRAY.length; i++) {
+  chartLabels.push(PRODUCTSARRAY[i].name);
+  
+  chartData.push(PRODUCTSARRAY[i].totalVotesOnPage);
+}
+console.log(chartData)
 var data = {
   datasets: [{
-    data: [RESULTDATAVOTES],
+    data: chartData,//RESULTDATAVOTES
+    backgroundColor : 'rgb(64, 211, 191)',
+    borderColor : 'rgb(46, 146, 133)',
+    pointBackgroundColor: 'rgb(46, 135, 100)',
   }],
-  labels: [RESULTLABELS]
+  labels: chartLabels //RESULTSLABELS
 };
 
 var pieChartConfig = {
-  type: 'pie',
+  type: 'bar',
   data: data,
 };
 
