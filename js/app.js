@@ -3,14 +3,9 @@
 // ------------------------------------------------------------
 //TODO LIST:
 // ------------------------------------------------------------
-// 
 // DISPLAY FIRST RANDOM GROUP ON LOAD VERSUS CLICK
-// UPDATE TEXT CONTENT FOR LI'S.
 //FIX COUNTS OF VIEWS BY PRODUCT
-//DETERMINE CAUSE OF DISPLAY OF PIE CHART MISSING COUNTS IN DATA
-//RESIZE AND STYLE PIE CHART
 //RESIZE SHARK IMAGE TO FIT IN WINDOW
-//STRETCH GOALS
 // ------------------------------------------------------------
 
 // ------------------------------------------------------------
@@ -21,7 +16,7 @@ var show = document.getElementById('resultList');
 show.style.display= 'block'; //Change back to none after testing or to block to test
 var MAXIMAGES = 20;
 var MINIMAGES = 0;
-var lastPageImages = [ ];
+var lastPageImages = [];
 var totalVotes = 0;
 var totalViews = 0;
 var container = document.getElementById('container');
@@ -30,6 +25,7 @@ var RESULTLABELS = [];
 var RESULTDATAVOTES = [];
 var initialImageLoad = document.getElementById('item_1');
 var chartData = [];
+
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -87,13 +83,11 @@ Product.prototype.render = function(parentId){
 function randomlySelectNewImages(){
   for(var i = 0; i < 3; i++){
     var randomIndex = getRandom(MAXIMAGES, MINIMAGES);
-    // i = 3;  // used for testing
     while(lastPageImages.includes(randomIndex)){
       randomIndex = getRandom(MAXIMAGES, MINIMAGES);
     }
     lastPageImages.push(randomIndex);
   }
-  
   if(lastPageImages.length === 6){
     lastPageImages.shift(); // Get syntax for shift
     lastPageImages.shift();
@@ -104,24 +98,15 @@ function randomlySelectNewImages(){
 // Add the new images to the DOM -
 //item_x are the three id's used in the HTML for attaching the image elements.
 
-//Got lost in details. Need to firt get parent of first item in listPageImages array.
-// After confirming that there is a parent and was a child, remove child.  Then, get the random number generated as the fourth(index 3) of the
-// lastPageImages Array.  Go through three remaining steps of creating the img element, setting the attributes for class, id and src, and appending the new
-// child to the parent element.  Potentially a time to write the record that the image was viewed and remove entry from lastPageImages array.  Hopefully,
-// this will address the data issue of only getting two of the three values.
 function addCurrentSetOfImages(){
-
   for (var i = 0; i < 3; i++) {
     if (totalVotes > 1){
       var parent = document.getElementById(`item_${i+1}`);
       var child = parent.firstElementChild;
       if(child){child.remove();}
-      // console.log(lastPageImages);
       var productToRender = lastPageImages[i];
-      // console.log(productToRender);
       var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
       var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
-      
       // var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
       // var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
       var newChild = document.createElement('img');
@@ -140,7 +125,7 @@ function addViewsOfProduct() {
   for (var i = 0; i < 3; i++){
     var productIndex = lastPageImages[i];//loop through first the random numbers in array
     // console.log(productIndex);
-    PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
+    // PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
     // PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
     // PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
   }
@@ -155,7 +140,7 @@ function stopVoting(){
     container.removeEventListener('click', handleClick);
     // console.log(totalVotes);
     totalVotes === 0;
-    for( i = 0; i < PRODUCTSARRAY.length; i++) {
+    for(var i = 0; i < PRODUCTSARRAY.length; i++) {
      
       RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
       RESULTLABELS.push(PRODUCTSARRAY[i].name);
@@ -185,8 +170,6 @@ function displayResults(){
 function renderChart(){
   var canvas = document.getElementById('markschart');
   var ctx = canvas.getContext('2d');
-  var chartLabels = [];
-  var chartData = [];
   // console.log(RESULTDATAVOTES);
   // for( i = 0; i < PRODUCTSARRAY.length; i++) {
   //   chartLabels.push(PRODUCTSARRAY[i].name); 
@@ -198,8 +181,6 @@ function renderChart(){
     datasets: [{
       label: 'Votes by Product',
       data: RESULTDATAVOTES,
-    
-    
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -279,37 +260,40 @@ function handleClick(event) {
 // --------------------------------------------------------------
 //                        Run Script
 // --------------------------------------------------------------
+// Generate Objects for Products
+function loadProductTable(){
+  for(var i = 0; i < productArray.length; i++){
+    new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
+  }
+}
 
-window.addEventListener('load', (event));{
+function myFunction(){
+  console.log('myFunction');
+}
+
+window.addEventListener('load', (myFunction));{
+  loadProductTable();
+  var PRODUCTSARRAY = Object.values(PRODUCTS);
+  console.log(PRODUCTS);
+  randomlySelectNewImages();
+  addCurrentSetOfImages();
+  console.log(lastPageImages);
+  console.log(PRODUCTSARRAY);
+  setStateToLocalStorage();
   console.log('page is fully loaded');
 }
 
-// Generate Objects for Products
-for(var i = 0; i < productArray.length; i++){
-  new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
-}
+
 
 // render the images at start up.
-randomlySelectNewImages();
-addCurrentSetOfImages();
+// randomlySelectNewImages();
+
 
 console.log(RESULTDATAVOTES);
 
 
 container.addEventListener('click', handleClick);
 // console.log(PRODUCTS);
-
-var PRODUCTSARRAY = Object.values(PRODUCTS);
-
-
-
-// data = {
-//   datasets: [{
-//       data: [10, 20, 30]
-//   }],
-
-
-
 
 
 // --------------------------------------------------------------------
