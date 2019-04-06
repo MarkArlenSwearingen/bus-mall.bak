@@ -1,36 +1,26 @@
 'use strict';
 
 // ------------------------------------------------------------
-//TODO LIST:
+//   TODO LIST:
 // ------------------------------------------------------------
-// 
-// DISPLAY FIRST RANDOM GROUP ON LOAD VERSUS CLICK
-// UPDATE TEXT CONTENT FOR LI'S.
-//FIX COUNTS OF VIEWS BY PRODUCT
-//DETERMINE CAUSE OF DISPLAY OF PIE CHART MISSING COUNTS IN DATA
-//RESIZE AND STYLE PIE CHART
-//RESIZE SHARK IMAGE TO FIT IN WINDOW
-//STRETCH GOALS
+// FIX COUNTS OF VIEWS BY PRODUCT, calculate results per requirements
+// Add defined items to local storage in predefined functions
 // ------------------------------------------------------------
-
+//
 // ------------------------------------------------------------
 //                     DEFINE GLOBAL VARIABLES
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
-show.style.display= 'block'; //Change back to none after testing or to block to test
+show.style.display= 'none'; //Change back to none after testing or to block to test
 var MAXIMAGES = 20;
 var MINIMAGES = 0;
-var lastPageImages = [ ];
+var lastPageImages = [];
 var totalVotes = 0;
-var totalViews = 0;
 var container = document.getElementById('container');
 var ol = document.getElementById('votes');
 var RESULTLABELS = [];
 var RESULTDATAVOTES = [];
-var initialImageLoad = document.getElementById('item_1');
-var chartData = [];
-
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
   ['./img/banana.jpg', 'banana', 'banana'],
@@ -73,9 +63,7 @@ Product.prototype.getPercentClicked = function(){
 };
 
 Product.prototype.render = function(parentId){
-  // console.log('hello');
   var parent = document.getElementById(parentId);
-  // console.log(parent);
   var img = document.createElement('img');
   img.setAttribute('id', this.HTMLid);
   img.setAttribute('src', this.imgFilePath);
@@ -87,13 +75,11 @@ Product.prototype.render = function(parentId){
 function randomlySelectNewImages(){
   for(var i = 0; i < 3; i++){
     var randomIndex = getRandom(MAXIMAGES, MINIMAGES);
-    // i = 3;  // used for testing
     while(lastPageImages.includes(randomIndex)){
       randomIndex = getRandom(MAXIMAGES, MINIMAGES);
     }
     lastPageImages.push(randomIndex);
   }
-  
   if(lastPageImages.length === 6){
     lastPageImages.shift(); // Get syntax for shift
     lastPageImages.shift();
@@ -101,62 +87,41 @@ function randomlySelectNewImages(){
   }
 }
 
-// Add the new images to the DOM -
-//item_x are the three id's used in the HTML for attaching the image elements.
-
-//Got lost in details. Need to firt get parent of first item in listPageImages array.
-// After confirming that there is a parent and was a child, remove child.  Then, get the random number generated as the fourth(index 3) of the
-// lastPageImages Array.  Go through three remaining steps of creating the img element, setting the attributes for class, id and src, and appending the new
-// child to the parent element.  Potentially a time to write the record that the image was viewed and remove entry from lastPageImages array.  Hopefully,
-// this will address the data issue of only getting two of the three values.
+// Add the new images to the DOM 
+//  ID's item_1, item_2 and item_3 are for attaching the image elements.
 function addCurrentSetOfImages(){
-
   for (var i = 0; i < 3; i++) {
-    if (totalVotes > 1){
-      var parent = document.getElementById(`item_${i+1}`);
-      var child = parent.firstElementChild;
-      if(child){child.remove();}
-      // console.log(lastPageImages);
-      var productToRender = lastPageImages[i];
-      // console.log(productToRender);
-      var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
-      var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
-      
-      // var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
-      // var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
-      var newChild = document.createElement('img');
-      newChild.setAttribute('class', 'product');
-      newChild.setAttribute('id', newIdName);
-      newChild.setAttribute('src', newImgPath);
-      parent.appendChild(newChild);
-      addViewsOfProduct();
-    }
+    var parent = document.getElementById(`item_${i+1}`);
+    var child = parent.firstElementChild;
+    if(child){child.remove();}
+    var productToRender = lastPageImages[i];
+    var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
+    var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
+    var newChild = document.createElement('img');
+    newChild.setAttribute('class', 'product');
+    newChild.setAttribute('id', newIdName);
+    newChild.setAttribute('src', newImgPath);
+    parent.appendChild(newChild);
+    addViewsOfProduct();
   }
 }
 
 //update the total views for each image
-//Error messages from these complicated statements so need a better method for tracking views of individual images.
 function addViewsOfProduct() {
   for (var i = 0; i < 3; i++){
-    var productIndex = lastPageImages[i];//loop through first the random numbers in array
-    // console.log(productIndex);
-    PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
-    // PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
-    // PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
+    var productIndex = lastPageImages[i];//loop through first values in array
+    //add one to total views by product using productIndex variable
   }
 }
 
 function stopVoting(){
-  // console.log(totalVotes);
   if(totalVotes > 25){
     totalVotes = 0;
   }
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
-    // console.log(totalVotes);
     totalVotes === 0;
-    for( i = 0; i < PRODUCTSARRAY.length; i++) {
-     
+    for(var i = 0; i < PRODUCTSARRAY.length; i++) {
       RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
       RESULTLABELS.push(PRODUCTSARRAY[i].name);
     }
@@ -165,15 +130,14 @@ function stopVoting(){
   }
 }
 
-
 var getRandom = function(MAXIMAGES, MINIMAGES){
   return Math.floor(Math.random() * (MAXIMAGES - MINIMAGES) + MINIMAGES);
 };
 
-
-
 function displayResults(){
   show = document.getElementById('resultList');
+  show.style.display = 'block';
+  show = document.getElementById('markschart');
   show.style.display = 'block';
   for(var i = 0; i < PRODUCTSARRAY.length; i++){
     var li = document.createElement('li');
@@ -185,42 +149,32 @@ function displayResults(){
 function renderChart(){
   var canvas = document.getElementById('markschart');
   var ctx = canvas.getContext('2d');
-  var chartLabels = [];
-  var chartData = [];
-  // console.log(RESULTDATAVOTES);
-  // for( i = 0; i < PRODUCTSARRAY.length; i++) {
-  //   chartLabels.push(PRODUCTSARRAY[i].name); 
-  //   chartData.push(PRODUCTSARRAY[i].totalVotesOnPage);
-  // }
-  console.log(RESULTDATAVOTES);
   var data = {
-    labels: RESULTLABELS, //RESULTSLABELS
+    labels: RESULTLABELS,
     datasets: [{
       label: 'Votes by Product',
       data: RESULTDATAVOTES,
-    
-    
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)'
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)'
       ],
       borderColor: [
         'rgba(255, 99, 132, 1)',
@@ -249,25 +203,20 @@ function renderChart(){
   var options = {
     backgroundColor: 'rgb(64, 211, 191)',
     borderColor: 'rgb(46, 146, 133)',
-    pointBackgroundColor: 'rgb(46, 135, 100)'
+    pointBackgroundColor: 'rgb(46, 135, 100)',
+    legend: false
   };
   var pieChartConfig = {
     type: 'bar',
     data: data,
     options: options
   };
-  
   var pieChart = new Chart(ctx, pieChartConfig);
 }
 
 function handleClick(event) {
-// console.log(event.target.id);
   if(event.target.className === 'product'){
-  // console.log(event.target.id);
-  //     event.target.id = 'boots';
-  // event.target.src = './img/boots.jpg';
     PRODUCTS[event.target.id].totalVotesOnPage++;
-    // console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
     stopVoting();
     randomlySelectNewImages();
@@ -276,47 +225,39 @@ function handleClick(event) {
   }
 }
 
+// Generate Objects for Products
+function loadProductTable(){
+  for(var i = 0; i < productArray.length; i++){
+    new Product(productArray[i][0], productArray[i][1], productArray[i][2]);
+  }
+}
+
+//Generate images at reload.
+function startImages(){
+  if (totalVotes === 25){totalVotes = 0;
+  }
+  randomlySelectNewImages();
+  addCurrentSetOfImages();
+  setStateToLocalStorage();
+}
 // --------------------------------------------------------------
 //                        Run Script
 // --------------------------------------------------------------
 
-window.addEventListener('load', (event));{
-  console.log('page is fully loaded');
+window.addEventListener('load', (startImages));{
+  loadProductTable();
+  var PRODUCTSARRAY = Object.values(PRODUCTS);
 }
 
-// Generate Objects for Products
-for(var i = 0; i < productArray.length; i++){
-  new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
-}
-
-// render the images at start up.
-randomlySelectNewImages();
-addCurrentSetOfImages();
-
-console.log(RESULTDATAVOTES);
-
-
+//Event listener is the single point of entry
 container.addEventListener('click', handleClick);
-// console.log(PRODUCTS);
-
-var PRODUCTSARRAY = Object.values(PRODUCTS);
-
-
-
-// data = {
-//   datasets: [{
-//       data: [10, 20, 30]
-//   }],
-
-
-
-
 
 // --------------------------------------------------------------------
-// LocalStorage 
+// Local Storage
 //-------------------------------------------------------------------------
 
 var STATE_KEY = 'totalVotes';
+var IMAGES_KEY = 'lastPageImages';
 
 //Place all functions within the getStateFromLocalStoreage and setStateToLocalStorage functions for any change of state.
 (function getStateFromLocalStoreage(){
@@ -352,8 +293,8 @@ function setDOM () {
 }
 
 function setTotalVotes() {
-  localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));//test then replace with STATE_KEY
-  //store the value of total votes if between 1 and 25 inclusive.
+  localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));
+  //store the value of total votes
 }
 
 function getTotalVotes(){
@@ -361,13 +302,17 @@ function getTotalVotes(){
 }
 
 function setLastImagesArray (){
-  // store the last images array
+  localStorage.setItem(IMAGES_KEY, JSON.stringify(lastPageImages));
+  // store the lastPageImages array
 }
 
 function getLastImagesArray (){
   //get last images array data and populate array
+  if(localStorage[IMAGES_KEY]){
+    var rawState = localStorage.getItem(IMAGES_KEY);
+    lastPageImages = JSON.parse(rawState);
+  }
 }
-
 function getProductVotesAndViews(){
   //get the totalVotesOnPage and totalViews from PRODUCT
 }
