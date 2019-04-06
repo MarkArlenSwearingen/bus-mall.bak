@@ -100,22 +100,20 @@ function randomlySelectNewImages(){
 
 function addCurrentSetOfImages(){
   for (var i = 0; i < 3; i++) {
-    if (totalVotes > 1){
+    // if (totalVotes > 1){
       var parent = document.getElementById(`item_${i+1}`);
       var child = parent.firstElementChild;
       if(child){child.remove();}
       var productToRender = lastPageImages[i];
       var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
       var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
-      // var newImgPath = PRODUCTS[nameOfFirstImageofDisplayed[0]].imgFilePath;
-      // var newIdName = PRODUCTS[nameOfFirstImageofDisplayed[0]].name;
       var newChild = document.createElement('img');
       newChild.setAttribute('class', 'product');
       newChild.setAttribute('id', newIdName);
       newChild.setAttribute('src', newImgPath);
       parent.appendChild(newChild);
       addViewsOfProduct();
-    }
+    // }
   }
 }
 
