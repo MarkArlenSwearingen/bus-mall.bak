@@ -13,7 +13,7 @@
 
 #header {
   grid-column-start: 1;
-  grid-column-end: 12;
+  grid-column-end: end;
 }
 
 #item_1 {
@@ -29,7 +29,7 @@
 
 #item_3 {
   grid-column-start: 9;
-  grid-column-end: 12;
+  grid-column-end: end;
 }
 #resultList {
   grid-column-start: 4;
@@ -45,9 +45,9 @@
   text-align: center;
 }
 
-.markschart {
-  width: 550px;
-  height: 550px;
+#markschart {
+ width: auto;
+  height: auto;
   border: 3px solid red;
 }
 

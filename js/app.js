@@ -29,6 +29,7 @@ var ol = document.getElementById('votes');
 var RESULTLABELS = [];
 var RESULTDATAVOTES = [];
 var initialImageLoad = document.getElementById('item_1');
+var chartData = [];
 
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
@@ -132,7 +133,6 @@ function addCurrentSetOfImages(){
     }
   }
 }
-  
 
 //update the total views for each image
 //Error messages from these complicated statements so need a better method for tracking views of individual images.
@@ -153,16 +153,18 @@ function stopVoting(){
   }
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
-    console.log(totalVotes);
+    // console.log(totalVotes);
     totalVotes === 0;
     for( i = 0; i < PRODUCTSARRAY.length; i++) {
-      RESULTLABELS.push(PRODUCTSARRAY[i].name);
-      
+     
       RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
+      RESULTLABELS.push(PRODUCTSARRAY[i].name);
     }
     displayResults();
+    renderChart();
   }
 }
+
 
 var getRandom = function(MAXIMAGES, MINIMAGES){
   return Math.floor(Math.random() * (MAXIMAGES - MINIMAGES) + MINIMAGES);
@@ -173,25 +175,97 @@ var getRandom = function(MAXIMAGES, MINIMAGES){
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
-  console.log(RESULTLABELS);
-  console.log(RESULTDATAVOTES);
-  console.log(RESULTLABELS[0]);
-  console.log(RESULTDATAVOTES[0]);
-  console.log(ol);
   for(var i = 0; i < PRODUCTSARRAY.length; i++){
     var li = document.createElement('li');
     li.textContent = `${RESULTDATAVOTES[i]} votes for the ${RESULTLABELS[i]}`;
     ol.appendChild(li);
   }
+}
 
+function renderChart(){
+  var canvas = document.getElementById('markschart');
+  var ctx = canvas.getContext('2d');
+  var chartLabels = [];
+  var chartData = [];
+  // console.log(RESULTDATAVOTES);
+  // for( i = 0; i < PRODUCTSARRAY.length; i++) {
+  //   chartLabels.push(PRODUCTSARRAY[i].name); 
+  //   chartData.push(PRODUCTSARRAY[i].totalVotesOnPage);
+  // }
+  console.log(RESULTDATAVOTES);
+  var data = {
+    labels: RESULTLABELS, //RESULTSLABELS
+    datasets: [{
+      label: 'Votes by Product',
+      data: RESULTDATAVOTES,
+    
+    
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+    }],
+  };
+  var options = {
+    backgroundColor: 'rgb(64, 211, 191)',
+    borderColor: 'rgb(46, 146, 133)',
+    pointBackgroundColor: 'rgb(46, 135, 100)'
+  };
+  var pieChartConfig = {
+    type: 'bar',
+    data: data,
+    options: options
+  };
+  
+  var pieChart = new Chart(ctx, pieChartConfig);
 }
 
 function handleClick(event) {
-  // console.log(event.target.id);
+// console.log(event.target.id);
   if(event.target.className === 'product'){
-    // console.log(event.target.id);
-    //     event.target.id = 'boots';
-    // event.target.src = './img/boots.jpg';
+  // console.log(event.target.id);
+  //     event.target.id = 'boots';
+  // event.target.src = './img/boots.jpg';
     PRODUCTS[event.target.id].totalVotesOnPage++;
     // console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
@@ -205,6 +279,11 @@ function handleClick(event) {
 // --------------------------------------------------------------
 //                        Run Script
 // --------------------------------------------------------------
+
+window.addEventListener('load', (event));{
+  console.log('page is fully loaded');
+}
+
 // Generate Objects for Products
 for(var i = 0; i < productArray.length; i++){
   new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
@@ -214,30 +293,23 @@ for(var i = 0; i < productArray.length; i++){
 randomlySelectNewImages();
 addCurrentSetOfImages();
 
+console.log(RESULTDATAVOTES);
 
 
 container.addEventListener('click', handleClick);
 // console.log(PRODUCTS);
 
-
 var PRODUCTSARRAY = Object.values(PRODUCTS);
 
-var canvas = document.getElementById('markschart');
-var ctx = canvas.getContext('2d');
 
-var data = {
-  datasets: [{
-    data: [RESULTDATAVOTES],
-  }],
-  labels: [RESULTLABELS]
-};
 
-var pieChartConfig = {
-  type: 'pie',
-  data: data,
-};
+// data = {
+//   datasets: [{
+//       data: [10, 20, 30]
+//   }],
 
-var pieChart = new Chart(ctx, pieChartConfig);
+
+
 
 
 // --------------------------------------------------------------------
