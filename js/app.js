@@ -18,15 +18,11 @@ var MAXIMAGES = 20;
 var MINIMAGES = 0;
 var lastPageImages = [];
 var totalVotes = 0;
-var totalViews = 0;
+var totalViews = 0;//Totals views is a todo item.
 var container = document.getElementById('container');
 var ol = document.getElementById('votes');
 var RESULTLABELS = [];
 var RESULTDATAVOTES = [];
-var initialImageLoad = document.getElementById('item_1');
-var chartData = [];
-
-
 var productArray = [
   ['./img/bag.jpg', 'bag', 'bag'],
   ['./img/banana.jpg', 'banana', 'banana'],
@@ -69,9 +65,7 @@ Product.prototype.getPercentClicked = function(){
 };
 
 Product.prototype.render = function(parentId){
-  // console.log('hello');
   var parent = document.getElementById(parentId);
-  // console.log(parent);
   var img = document.createElement('img');
   img.setAttribute('id', this.HTMLid);
   img.setAttribute('src', this.imgFilePath);
@@ -96,50 +90,40 @@ function randomlySelectNewImages(){
 }
 
 // Add the new images to the DOM -
-//item_x are the three id's used in the HTML for attaching the image elements.
-
+//item_1, item_2 and item_3 are the three id's used in the HTML for attaching the image elements.
 function addCurrentSetOfImages(){
   for (var i = 0; i < 3; i++) {
-    // if (totalVotes > 1){
-      var parent = document.getElementById(`item_${i+1}`);
-      var child = parent.firstElementChild;
-      if(child){child.remove();}
-      var productToRender = lastPageImages[i];
-      var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
-      var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
-      var newChild = document.createElement('img');
-      newChild.setAttribute('class', 'product');
-      newChild.setAttribute('id', newIdName);
-      newChild.setAttribute('src', newImgPath);
-      parent.appendChild(newChild);
-      addViewsOfProduct();
-    // }
+    var parent = document.getElementById(`item_${i+1}`);
+    var child = parent.firstElementChild;
+    if(child){child.remove();}
+    var productToRender = lastPageImages[i];
+    var newIdName = PRODUCTSARRAY[productToRender].HTMLid;
+    var newImgPath = PRODUCTSARRAY[productToRender].imgFilePath;
+    var newChild = document.createElement('img');
+    newChild.setAttribute('class', 'product');
+    newChild.setAttribute('id', newIdName);
+    newChild.setAttribute('src', newImgPath);
+    parent.appendChild(newChild);
+    addViewsOfProduct();
   }
 }
 
 //update the total views for each image
-//Error messages from these complicated statements so need a better method for tracking views of individual images.
 function addViewsOfProduct() {
   for (var i = 0; i < 3; i++){
     var productIndex = lastPageImages[i];//loop through first the random numbers in array
-    // console.log(productIndex);
-    // PRODUCTSARRAY[productIndex].totalViews++;//Adding one to the number of total views for an indivual product in the PRODUCTS objects
-    // PRODUCTS[productArray[lastPageImages[1]][1]].totalViews++;
-    // PRODUCTS[productArray[lastPageImages[2]][1]].totalViews++;
+    //add one to total views by product using productIndex variable
   }
 }
 
 function stopVoting(){
-  // console.log(totalVotes);
   if(totalVotes > 25){
     totalVotes = 0;
   }
   if(totalVotes === 25){
     container.removeEventListener('click', handleClick);
-    // console.log(totalVotes);
     totalVotes === 0;
     for(var i = 0; i < PRODUCTSARRAY.length; i++) {
-     
       RESULTDATAVOTES.push(PRODUCTSARRAY[i].totalVotesOnPage);
       RESULTLABELS.push(PRODUCTSARRAY[i].name);
     }
@@ -148,12 +132,9 @@ function stopVoting(){
   }
 }
 
-
 var getRandom = function(MAXIMAGES, MINIMAGES){
   return Math.floor(Math.random() * (MAXIMAGES - MINIMAGES) + MINIMAGES);
 };
-
-
 
 function displayResults(){
   show = document.getElementById('resultList');
@@ -168,12 +149,6 @@ function displayResults(){
 function renderChart(){
   var canvas = document.getElementById('markschart');
   var ctx = canvas.getContext('2d');
-  // console.log(RESULTDATAVOTES);
-  // for( i = 0; i < PRODUCTSARRAY.length; i++) {
-  //   chartLabels.push(PRODUCTSARRAY[i].name); 
-  //   chartData.push(PRODUCTSARRAY[i].totalVotesOnPage);
-  // }
-  console.log(RESULTDATAVOTES);
   var data = {
     labels: RESULTLABELS, //RESULTSLABELS
     datasets: [{
@@ -235,18 +210,12 @@ function renderChart(){
     data: data,
     options: options
   };
-  
   var pieChart = new Chart(ctx, pieChartConfig);
 }
 
 function handleClick(event) {
-// console.log(event.target.id);
   if(event.target.className === 'product'){
-  // console.log(event.target.id);
-  //     event.target.id = 'boots';
-  // event.target.src = './img/boots.jpg';
     PRODUCTS[event.target.id].totalVotesOnPage++;
-    // console.log(PRODUCTS[event.target.id].totalViews);
     totalVotes++;
     stopVoting();
     randomlySelectNewImages();
@@ -255,9 +224,6 @@ function handleClick(event) {
   }
 }
 
-// --------------------------------------------------------------
-//                        Run Script
-// --------------------------------------------------------------
 // Generate Objects for Products
 function loadProductTable(){
   for(var i = 0; i < productArray.length; i++){
@@ -265,34 +231,25 @@ function loadProductTable(){
   }
 }
 
-function myFunction(){
-  console.log('myFunction');
-}
-
-window.addEventListener('load', (myFunction));{
-  loadProductTable();
-  var PRODUCTSARRAY = Object.values(PRODUCTS);
-  console.log(PRODUCTS);
+//Generate images at reload.
+function startImages(){
+  if (totalVotes === 25){totalVotes = 0;
+  }
   randomlySelectNewImages();
   addCurrentSetOfImages();
-  console.log(lastPageImages);
-  console.log(PRODUCTSARRAY);
   setStateToLocalStorage();
-  console.log('page is fully loaded');
+}
+// --------------------------------------------------------------
+//                        Run Script
+// --------------------------------------------------------------
+
+window.addEventListener('load', (startImages));{
+  loadProductTable();
+  var PRODUCTSARRAY = Object.values(PRODUCTS);
 }
 
-
-
-// render the images at start up.
-// randomlySelectNewImages();
-
-
-console.log(RESULTDATAVOTES);
-
-
+//Event listener is single point of entry
 container.addEventListener('click', handleClick);
-// console.log(PRODUCTS);
-
 
 // --------------------------------------------------------------------
 // LocalStorage 
@@ -334,7 +291,7 @@ function setDOM () {
 }
 
 function setTotalVotes() {
-  localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));//test then replace with STATE_KEY
+  localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));
   //store the value of total votes if between 1 and 25 inclusive.
 }
 
