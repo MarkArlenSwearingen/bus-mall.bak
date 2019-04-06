@@ -255,6 +255,7 @@ container.addEventListener('click', handleClick);
 //-------------------------------------------------------------------------
 
 var STATE_KEY = 'totalVotes';
+var IMAGES_KEY = 'lastPageImages';
 
 //Place all functions within the getStateFromLocalStoreage and setStateToLocalStorage functions for any change of state.
 (function getStateFromLocalStoreage(){
@@ -299,14 +300,17 @@ function getTotalVotes(){
 }
 
 function setLastImagesArray (){
-  // localStorage.setItem(STATE_KEY, JSON.stringify(lastPageImages));
+  localStorage.setItem(IMAGES_KEY, JSON.stringify(lastPageImages));
   // store the lastPageImages array
 }
 
 function getLastImagesArray (){
   //get last images array data and populate array
+  if(localStorage[IMAGES_KEY]){
+    var rawState = localStorage.getItem(IMAGES_KEY);
+    lastPageImages = JSON.parse(rawState);
+  }
 }
-
 function getProductVotesAndViews(){
   //get the totalVotesOnPage and totalViews from PRODUCT
 }
