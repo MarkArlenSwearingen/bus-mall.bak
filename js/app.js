@@ -1,24 +1,22 @@
 'use strict';
 
 // ------------------------------------------------------------
-//TODO LIST:
+//   TODO LIST:
 // ------------------------------------------------------------
-// DISPLAY FIRST RANDOM GROUP ON LOAD VERSUS CLICK
-//FIX COUNTS OF VIEWS BY PRODUCT
-//RESIZE SHARK IMAGE TO FIT IN WINDOW
+// FIX COUNTS OF VIEWS BY PRODUCT, calculate results per requirements
+// Add defined items to local storage in predefined functions
 // ------------------------------------------------------------
-
+//
 // ------------------------------------------------------------
 //                     DEFINE GLOBAL VARIABLES
 // ----------------------------------------
 var PRODUCTS = {};
 var show = document.getElementById('resultList');
-show.style.display= 'block'; //Change back to none after testing or to block to test
+show.style.display= 'none'; //Change back to none after testing or to block to test
 var MAXIMAGES = 20;
 var MINIMAGES = 0;
 var lastPageImages = [];
 var totalVotes = 0;
-var totalViews = 0;//Totals views is a todo item.
 var container = document.getElementById('container');
 var ol = document.getElementById('votes');
 var RESULTLABELS = [];
@@ -89,8 +87,8 @@ function randomlySelectNewImages(){
   }
 }
 
-// Add the new images to the DOM -
-//item_1, item_2 and item_3 are the three id's used in the HTML for attaching the image elements.
+// Add the new images to the DOM 
+//  ID's item_1, item_2 and item_3 are for attaching the image elements.
 function addCurrentSetOfImages(){
   for (var i = 0; i < 3; i++) {
     var parent = document.getElementById(`item_${i+1}`);
@@ -111,7 +109,7 @@ function addCurrentSetOfImages(){
 //update the total views for each image
 function addViewsOfProduct() {
   for (var i = 0; i < 3; i++){
-    var productIndex = lastPageImages[i];//loop through first the random numbers in array
+    var productIndex = lastPageImages[i];//loop through first values in array
     //add one to total views by product using productIndex variable
   }
 }
@@ -150,7 +148,7 @@ function renderChart(){
   var canvas = document.getElementById('markschart');
   var ctx = canvas.getContext('2d');
   var data = {
-    labels: RESULTLABELS, //RESULTSLABELS
+    labels: RESULTLABELS,
     datasets: [{
       label: 'Votes by Product',
       data: RESULTDATAVOTES,
@@ -203,7 +201,8 @@ function renderChart(){
   var options = {
     backgroundColor: 'rgb(64, 211, 191)',
     borderColor: 'rgb(46, 146, 133)',
-    pointBackgroundColor: 'rgb(46, 135, 100)'
+    pointBackgroundColor: 'rgb(46, 135, 100)',
+    legend: false
   };
   var pieChartConfig = {
     type: 'bar',
@@ -227,7 +226,7 @@ function handleClick(event) {
 // Generate Objects for Products
 function loadProductTable(){
   for(var i = 0; i < productArray.length; i++){
-    new Product(productArray[i][0], productArray[i][1], productArray[i][2]);//This is the last time I am going to touch the productsArray
+    new Product(productArray[i][0], productArray[i][1], productArray[i][2]);
   }
 }
 
@@ -248,11 +247,11 @@ window.addEventListener('load', (startImages));{
   var PRODUCTSARRAY = Object.values(PRODUCTS);
 }
 
-//Event listener is single point of entry
+//Event listener is the single point of entry
 container.addEventListener('click', handleClick);
 
 // --------------------------------------------------------------------
-// LocalStorage 
+// Local Storage
 //-------------------------------------------------------------------------
 
 var STATE_KEY = 'totalVotes';
@@ -292,7 +291,7 @@ function setDOM () {
 
 function setTotalVotes() {
   localStorage.setItem(STATE_KEY, JSON.stringify(totalVotes));
-  //store the value of total votes if between 1 and 25 inclusive.
+  //store the value of total votes
 }
 
 function getTotalVotes(){
@@ -300,7 +299,8 @@ function getTotalVotes(){
 }
 
 function setLastImagesArray (){
-  // store the last images array
+  // localStorage.setItem(STATE_KEY, JSON.stringify(lastPageImages));
+  // store the lastPageImages array
 }
 
 function getLastImagesArray (){
