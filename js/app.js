@@ -137,6 +137,8 @@ var getRandom = function(MAXIMAGES, MINIMAGES){
 function displayResults(){
   show = document.getElementById('resultList');
   show.style.display = 'block';
+  show = document.getElementById('markschart');
+  show.style.display = 'block';
   for(var i = 0; i < PRODUCTSARRAY.length; i++){
     var li = document.createElement('li');
     li.textContent = `${RESULTDATAVOTES[i]} votes for the ${RESULTLABELS[i]}`;
